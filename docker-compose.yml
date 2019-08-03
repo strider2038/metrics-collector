@@ -1,0 +1,21 @@
+version: '3.0'
+
+volumes:
+  composer_data: {}
+
+services:
+
+  metrics_collector:
+    container_name: metrics_collector
+    build:
+      context: ./.dev
+    environment:
+      APP_ENV: dev
+      DATABASE_URL: 'sqlite:///%kernel.project_dir%/var/database/metrics.db'
+      CORS_ALLOW_ORIGIN: '*'
+    volumes:
+      - .:/app
+      - composer_data:/var/run/composer
+    ports:
+      - "8080:8080"
+      - "9001:9000"
