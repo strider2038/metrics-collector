@@ -11,7 +11,7 @@ services:
       context: ./.dev
     environment:
       APP_ENV: dev
-      DATABASE_URL: 'sqlite:///%kernel.project_dir%/var/database/metrics.db'
+      DATABASE_URL: 'sqlite:///%kernel.project_dir%/database/metrics.db'
       CORS_ALLOW_ORIGIN: '*'
     volumes:
       - .:/app
