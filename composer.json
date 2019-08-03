@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "api-platform/api-pack": "^1.2",
+        "doctrine/doctrine-migrations-bundle": "^2.0",
         "spiral/roadrunner": "^1.4",
         "symfony/console": "4.3.*",
         "symfony/dotenv": "4.3.*",
