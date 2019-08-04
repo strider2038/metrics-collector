@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Embeddable()
@@ -11,6 +13,9 @@ class Format
 {
     /**
      * @ORM\Column(type="integer", nullable=false)
+     * @Assert\GreaterThanOrEqual("0")
+     * @Assert\LessThanOrEqual("6")
+     * @Groups({"formatRead", "formatWrite"})
      *
      * @var int
      */
@@ -18,6 +23,8 @@ class Format
 
     /**
      * @ORM\Column(type="string", length=1, nullable=false)
+     * @Assert\Length(min="1", max="1")
+     * @Groups({"formatRead", "formatWrite"})
      *
      * @var string
      */
@@ -25,6 +32,8 @@ class Format
 
     /**
      * @ORM\Column(type="string", length=1, nullable=false)
+     * @Assert\Length(min="0", max="1")
+     * @Groups({"formatRead", "formatWrite"})
      *
      * @var string
      */
@@ -32,6 +41,8 @@ class Format
 
     /**
      * @ORM\Column(type="string", length=25, nullable=false)
+     * @Assert\Length(max="25")
+     * @Groups({"formatRead", "formatWrite"})
      *
      * @var string
      */

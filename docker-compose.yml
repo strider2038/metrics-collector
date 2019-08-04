@@ -13,6 +13,7 @@ services:
       APP_ENV: dev
       DATABASE_URL: 'sqlite:///%kernel.project_dir%/database/metrics.db'
       CORS_ALLOW_ORIGIN: '*'
+      APP_TITLE: 'Metrics collector'
     volumes:
       - .:/app
       - composer_data:/var/run/composer

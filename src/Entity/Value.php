@@ -4,9 +4,19 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={
+ *          "groups"={"valueRead"}
+ *     },
+ *     denormalizationContext={
+ *          "groups"={"valueWrite"}
+ *     },
+ *     itemOperations={"get", "delete"}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\ValueRepository")
  */
 class Value
@@ -15,27 +25,47 @@ class Value
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"valueRead"})
+     *
+     * @var int
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Metric", inversedBy="metricValues")
      * @ORM\JoinColumn(nullable=false, referencedColumnName="name")
+     * @Assert\NotBlank()
+     * @Groups({"valueRead", "valueWrite"})
+     *
+     * @var Metric
      */
     private $metric;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
+     * @Assert\NotBlank()
+     * @Groups({"valueRead", "valueWrite"})
+     *
+     * @var \DateTimeInterface
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="float", nullable=false)
+     * @Assert\NotBlank()
+     * @Groups({"valueRead", "valueWrite"})
+     *
+     * @var float
      */
     private $value;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=false)
+     * @Assert\NotBlank()
+     * @Assert\Length(max="100")
+     * @Groups({"valueRead", "valueWrite"})
+     *
+     * @var string
      */
     private $tag;
 
@@ -59,6 +89,11 @@ class Value
     public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): void
+    {
+        $this->createdAt = $createdAt;
     }
 
     public function getValue(): float

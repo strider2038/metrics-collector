@@ -3,65 +3,109 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={
+ *          "groups"={"metricRead", "metricSectionRead", "formatRead"}
+ *     },
+ *     denormalizationContext={
+ *          "groups"={"metricWrite", "metricSectionWrite", "formatWrite"}
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\MetricRepository")
+ * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity({"name"})
+ * @UniqueEntity({"orderIndex"})
  */
 class Metric
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\Column(type="string", length=25)
+     * @ORM\Column(type="string", length=25, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Length(min="3", max="25")
+     * @Assert\Regex(pattern="/[a-z_]+/", message="Allowed symbols: a-z, _.")
+     * @Groups({"metricRead", "metricWrite"})
+     *
+     * @var string
      */
     private $name;
 
     /**
      * @ORM\ManyToOne(targetEntity=Section::class, inversedBy="metrics")
      * @ORM\JoinColumn(nullable=false, referencedColumnName="name")
+     * @Assert\NotBlank()
+     * @Groups({"metricSectionRead", "metricSectionWrite"})
+     *
+     * @var string
      */
     private $section;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=false)
+     * @Assert\NotBlank()
+     * @Assert\Length(min="3", max="100")
+     * @Groups({"metricRead", "metricWrite"})
+     *
+     * @var string
      */
     private $title;
 
     /**
      * @ORM\Embedded(class=Format::class)
+     * @Assert\Valid()
+     * @Groups({"metricRead", "metricWrite"})
      *
      * @var Format
      */
     private $format;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="integer", nullable=false, unique=true)
+     * @Assert\NotBlank()
+     * @Groups({"metricRead", "metricWrite"})
+     *
+     * @var int
      */
     private $orderIndex;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
+     * @Groups({"metricRead"})
+     *
+     * @var \DateTimeInterface
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
+     * @Groups({"metricRead"})
+     *
+     * @var \DateTimeInterface
      */
     private $updatedAt;
 
     /**
      * @ORM\OneToMany(targetEntity=Value::class, mappedBy="metric", orphanRemoval=true)
+     * @ApiSubresource()
+     *
+     * @var Value[]
      */
-    private $metricValues;
+    private $values;
 
     public function __construct()
     {
         $this->format = new Format();
-        $this->metricValues = new ArrayCollection();
+        $this->values = new ArrayCollection();
     }
 
     public function getName(): string
@@ -137,31 +181,44 @@ class Metric
     /**
      * @return Collection|Value[]
      */
-    public function getMetricValues(): Collection
+    public function getValues(): Collection
     {
-        return $this->metricValues;
+        return $this->values;
     }
 
-    public function addMetricValue(Value $metricValue): self
+    public function addValue(Value $value): self
     {
-        if (!$this->metricValues->contains($metricValue)) {
-            $this->metricValues[] = $metricValue;
-            $metricValue->setMetric($this);
+        if (!$this->values->contains($value)) {
+            $this->values[] = $value;
+            $value->setMetric($this);
         }
 
         return $this;
     }
 
-    public function removeMetricValue(Value $metricValue): self
+    public function removeValue(Value $value): self
     {
-        if ($this->metricValues->contains($metricValue)) {
-            $this->metricValues->removeElement($metricValue);
+        if ($this->values->contains($value)) {
+            $this->values->removeElement($value);
             // set the owning side to null (unless already changed)
-            if ($metricValue->getMetric() === $this) {
-                $metricValue->setMetric(null);
+            if ($value->getMetric() === $this) {
+                $value->setMetric(null);
             }
         }
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable('now');
+
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTimeImmutable('now');
+        }
     }
 }
