@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -18,6 +19,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     },
  *     denormalizationContext={
  *          "groups"={"metricWrite", "metricSectionWrite", "formatWrite"}
+ *     },
+ *     attributes={
+ *          "order"={"orderIndex": "ASC"}
  *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\MetricRepository")
@@ -64,6 +68,30 @@ class Metric
      * @ORM\Embedded(class=Format::class)
      * @Assert\Valid()
      * @Groups({"metricRead", "metricWrite"})
+     * @ApiProperty(
+     *     swaggerContext={
+     *         "type"="object",
+     *         "properties"={
+     *              "decimalsCount"={
+     *                  "type"="integer",
+     *                  "min"="0",
+     *                  "max"="6"
+     *              },
+     *              "decimalPoint"={
+     *                  "type"="string",
+     *                  "maxLength"=1
+     *              },
+     *              "thousandsSeparator"={
+     *                  "type"="string",
+     *                  "maxLength"=1
+     *              },
+     *              "unit"={
+     *                  "type"="string",
+     *                  "maxLength"=25
+     *              }
+     *         }
+     *     }
+     * )
      *
      * @var Format
      */

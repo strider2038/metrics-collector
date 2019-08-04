@@ -15,6 +15,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     denormalizationContext={
  *          "groups"={"valueWrite"}
  *     },
+ *     attributes={
+ *          "order"={"createdAt": "DESC"}
+ *     },
  *     itemOperations={"get", "delete"}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ValueRepository")

@@ -18,6 +18,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     },
  *     denormalizationContext={
  *          "groups"={"sectionWrite"}
+ *     },
+ *     attributes={
+ *          "order"={"orderIndex": "ASC"}
  *     }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\SectionRepository")
