@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Section;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -19,32 +21,26 @@ class SectionRepository extends ServiceEntityRepository
         parent::__construct($registry, Section::class);
     }
 
-    // /**
-    //  * @return Section[] Returns an array of Section objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findFirstSection(): ?Section
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $queryBuilder = $this->createQueryBuilder('s');
+        $queryBuilder->orderBy('s.orderIndex', 'ASC');
+        $queryBuilder->setMaxResults(1);
+        $query = $queryBuilder->getQuery();
 
-    /*
-    public function findOneBySomeField($value): ?Section
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $query->getOneOrNullResult();
     }
-    */
+
+    /**
+     * @return Section[]|Collection
+     */
+    public function findAllOrderedByIndex(): Collection
+    {
+        $queryBuilder = $this->createQueryBuilder('s');
+        $queryBuilder->orderBy('s.orderIndex', 'ASC');
+        $query = $queryBuilder->getQuery();
+        $rows = $query->getResult();
+
+        return new ArrayCollection($rows);
+    }
 }

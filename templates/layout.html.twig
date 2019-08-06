@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+{% endblock %}
+
+{% block body %}
+    <nav class="nav-extended">
+        <div class="nav-wrapper container">
+            <a href="#" class="brand-logo">Logo</a>
+        </div>
+        <div class="nav-content container">
+            <ul class="tabs tabs-transparent">
+                {% for section in sections %}
+                    {% if currentSection is defined and section.name == currentSection.name %}
+                        <li class="tab"><a href="#" class="active">{{ section.title }}</a></li>
+                    {% else %}
+                        <li class="tab"><a href="/statistics/{{ section.name }}">{{ section.title }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% if currentSection is defined %}
+            <h1>{{ currentSection.title }}</h1>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </div>
+{% endblock %}

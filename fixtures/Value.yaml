@@ -1,13 +1,25 @@
 App\Entity\Value:
 
-  coverageValues{1..20}:
+  coverageMasterValues{1..20}:
     metric: '@coverageMetric'
     value: <numberBetween(1, 100)>
     createdAt: <dateTimeBetween('-10 days', 'now')>
     tag: 'master'
 
-  qualityValues{1..20}:
+  coverageDevelopValues{1..25}:
     metric: '@coverageMetric'
+    value: <numberBetween(1, 100)>
+    createdAt: <dateTimeBetween('-12 days', 'now')>
+    tag: 'develop'
+
+  qualityMasterValues{1..20}:
+    metric: '@qualityMetric'
     value: <numberBetween(1, 100)>
     createdAt: <dateTimeBetween('-10 days', 'now')>
     tag: 'master'
+
+  qualityDevelopValues{1..20}:
+    metric: '@qualityMetric'
+    value: <numberBetween(1, 100)>
+    createdAt: <dateTimeBetween('-12 days', 'now')>
+    tag: 'develop'
