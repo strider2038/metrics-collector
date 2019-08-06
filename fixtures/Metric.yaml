@@ -1,0 +1,19 @@
+App\Entity\Metric:
+
+  coverageMetric:
+    section: '@mainSection'
+    name: 'main_coverage'
+    title: 'Coverage'
+    orderIndex: 0
+
+  qualityMetric:
+    section: '@mainSection'
+    name: 'main_quality'
+    title: 'Quality'
+    orderIndex: 1
+
+  customMetric{2..6}:
+    section: '@mainSection'
+    name: 'metric<current()>'
+    title: <word()>
+    orderIndex: <current()>

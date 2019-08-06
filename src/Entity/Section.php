@@ -36,7 +36,7 @@ class Section
      * @ORM\Column(type="string", length=25, nullable=false, unique=true)
      * @Assert\NotBlank()
      * @Assert\Length(min="3", max="25")
-     * @Assert\Regex(pattern="/[a-z_]+/", message="Allowed symbols: a-z, _.")
+     * @Assert\Regex(pattern="/[a-z0-9_]+/", message="Allowed symbols: a-z, 0-9, _.")
      * @Groups({"sectionRead", "sectionWrite"})
      *
      * @var string

@@ -1,0 +1,11 @@
+App\Entity\Section:
+
+  mainSection:
+    name: 'main'
+    title: 'Main section'
+    orderIndex: 0
+
+  sections{1..5}:
+    name: 'section<current()>'
+    title: <word()>
+    orderIndex: <current()>

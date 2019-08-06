@@ -1,0 +1,13 @@
+App\Entity\Value:
+
+  coverageValues{1..20}:
+    metric: '@coverageMetric'
+    value: <numberBetween(1, 100)>
+    createdAt: <dateTimeBetween('-10 days', 'now')>
+    tag: 'master'
+
+  qualityValues{1..20}:
+    metric: '@coverageMetric'
+    value: <numberBetween(1, 100)>
+    createdAt: <dateTimeBetween('-10 days', 'now')>
+    tag: 'master'
