@@ -15,9 +15,11 @@ services:
       DATABASE_URL: 'sqlite:///%kernel.project_dir%/database/metrics.db'
       CORS_ALLOW_ORIGIN: '*'
       ACCESS_TOKEN: '!ChangeMe!'
+      XDEBUG_CONFIG: 'remote_enable=1 remote_autostart=1 remote_mode=req remote_port=9000 remote_host=172.17.0.1'
     volumes:
       - .:/app
       - composer_data:/var/run/composer
     ports:
+      - "6001:6001"
       - "8080:8080"
       - "9001:9000"

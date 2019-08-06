@@ -12,15 +12,20 @@ security:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
-    main:
-      anonymous: true
+    api:
+      pattern: ^/api
+      anonymous: false
+      security: true
       stateless: true
+      methods: [POST, PUT, PATCH]
       guard:
         authenticators:
-          - App\Security\TokenAuthenticator
+        - App\Security\TokenAuthenticator
+    main:
+      anonymous: true
+      security: false
+      stateless: true
 
-      # activate different ways to authenticate
-      # https://symfony.com/doc/current/security.html#firewalls-authentication
 
-  access_control:
-    - { path: ^/api, methods: [POST, PUT, PATCH] }
+#  access_control:
+#    - { path: ^/api, methods: [POST, PUT, PATCH] }

@@ -35,7 +35,7 @@ class Value
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Metric", inversedBy="metricValues")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Metric", inversedBy="values")
      * @ORM\JoinColumn(nullable=false, referencedColumnName="name")
      * @Assert\NotBlank()
      * @Groups({"valueRead", "valueWrite"})

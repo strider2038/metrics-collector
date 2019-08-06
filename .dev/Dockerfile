@@ -5,7 +5,7 @@ ARG ROADRUNNER_VERSION=1.4.7
 
 ENV APP_ENV=dev \
     COMPOSER_HOME=/var/run/composer \
-    XDEBUG_CONFIG="remote_enable=1 remote_mode=req remote_port=9000 remote_host=172.17.0.1" \
+    XDEBUG_CONFIG="remote_enable=1 remote_autostart=1 remote_mode=req remote_port=9000 remote_host=172.17.0.1" \
     PHP_IDE_CONFIG="serverName=default"
 
 RUN set -xe \
@@ -24,20 +24,18 @@ RUN set -xe \
     && docker-php-ext-install \
         sockets \
         opcache \
-        intl \
-    && docker-php-ext-enable \
-       sockets \
-       opcache \
     && pecl install xdebug \
-    && pecl clear-cache \
     && docker-php-ext-enable \
+        sockets \
         opcache \
         xdebug \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && mkdir -p $COMPOSER_HOME \
     && chmod -R 0777 $COMPOSER_HOME
 
-EXPOSE 8080 9000
+COPY ./files /
+
+EXPOSE 6001 8080 9000
 
 CMD ["/usr/local/bin/rr", "serve", "-d", "-c", "/app/road-runner.dist.yaml"]
 

@@ -40,8 +40,8 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         $bearer = $request->headers->get('AUTHORIZATION');
         $token = '';
 
-        if (preg_match('/Bearer .*/', $bearer, $matches)) {
-            $token = $matches[0][0];
+        if (preg_match('/Bearer (.*)/', $bearer, $matches)) {
+            $token = $matches[1];
         }
 
         return $token;

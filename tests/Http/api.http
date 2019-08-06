@@ -2,3 +2,22 @@ GET http://localhost:8080/api
 Accept: application/json
 
 ###
+
+GET http://localhost:8080/api/sections
+Accept: application/ld+json
+
+###
+
+POST http://localhost:8080/api/sections
+Authorization: Bearer !ChangeMe!
+Accept: application/ld+json
+Content-Type: application/ld+json
+
+{
+  "name": "name",
+  "title": "Title",
+  "orderIndex": 0
+}
+
+###
+
