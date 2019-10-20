@@ -1,7 +1,7 @@
 FROM php:7.3-alpine
 LABEL maintainer="Igor Lazarev <strider2038@yandex.ru>"
 
-ARG ROADRUNNER_VERSION=1.4.7
+ARG ROADRUNNER_VERSION=1.5.0
 
 ENV APP_ENV=dev \
     COMPOSER_HOME=/var/run/composer \

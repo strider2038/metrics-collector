@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Metric;
 use App\Entity\Value;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -19,32 +20,31 @@ class ValueRepository extends ServiceEntityRepository
         parent::__construct($registry, Value::class);
     }
 
-    // /**
-    //  * @return Value[] Returns an array of Value objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getAverageValuesPerDayByMetric(Metric $metric): array
     {
-        return $this->createQueryBuilder('v')
-            ->andWhere('v.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('v.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $connection = $this->getEntityManager()->getConnection();
 
-    /*
-    public function findOneBySomeField($value): ?Value
-    {
-        return $this->createQueryBuilder('v')
-            ->andWhere('v.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $sql = '
+            SELECT
+                datetime(v.created_at, \'start of day\') AS day,
+                AVG(value) AS value
+            FROM value v
+            WHERE v.metric_id = :metric
+            GROUP BY day
+            ORDER BY day DESC
+        ';
+
+        $statement = $connection->prepare($sql);
+        $statement->execute(['metric' => $metric->getName()]);
+        $rows = $statement->fetchAll();
+
+        $values = [];
+
+        foreach ($rows as $row) {
+            $day = (new \DateTimeImmutable($row['day']))->format('Y-m-d');
+            $values[$day] = $row['value'];
+        }
+
+        return $values;
     }
-    */
 }

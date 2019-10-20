@@ -9,3 +9,8 @@
 ###< symfony/framework-bundle ###
 
 /database/*
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###

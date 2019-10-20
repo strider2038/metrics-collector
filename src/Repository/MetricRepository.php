@@ -3,7 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\Metric;
+use App\Entity\MetricCollection;
+use App\Entity\Section;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Ramsey\Collection\CollectionInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -19,32 +24,15 @@ class MetricRepository extends ServiceEntityRepository
         parent::__construct($registry, Metric::class);
     }
 
-    // /**
-    //  * @return Metric[] Returns an array of Metric objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findBySectionOrderedByIndex(Section $section): MetricCollection
     {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $queryBuilder = $this->createQueryBuilder('m');
+        $queryBuilder->where('m.section = :section');
+        $queryBuilder->orderBy('m.orderIndex', 'ASC');
+        $queryBuilder->setParameter('section', $section);
+        $query = $queryBuilder->getQuery();
+        $rows = $query->getResult();
 
-    /*
-    public function findOneBySomeField($value): ?Metric
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return new MetricCollection($rows);
     }
-    */
 }

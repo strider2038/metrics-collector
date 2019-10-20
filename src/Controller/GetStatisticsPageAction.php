@@ -11,6 +11,7 @@
 namespace App\Controller;
 
 use App\Service\SectionReader;
+use App\Service\StatisticsReader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,9 +25,13 @@ class GetStatisticsPageAction extends AbstractController
     /** @var SectionReader */
     private $sectionReader;
 
-    public function __construct(SectionReader $sectionReader)
+    /** @var StatisticsReader */
+    private $statisticsReader;
+
+    public function __construct(SectionReader $sectionReader, StatisticsReader $statisticsReader)
     {
         $this->sectionReader = $sectionReader;
+        $this->statisticsReader = $statisticsReader;
     }
 
     /**
@@ -52,6 +57,7 @@ class GetStatisticsPageAction extends AbstractController
             $response = $this->render('statistics/index.html.twig', [
                 'currentSection' => $section,
                 'sections' => $sections,
+                'statistics' => $this->statisticsReader->getDailySectionStatistics($section),
             ]);
         }
 
