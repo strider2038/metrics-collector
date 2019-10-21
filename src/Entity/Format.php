@@ -87,4 +87,24 @@ class Format
     {
         $this->unit = $unit;
     }
+
+    public function formatValue(?float $value): string
+    {
+        if ($value === null) {
+            $formatted = '';
+        } else {
+            $formatted = number_format(
+                $value,
+                $this->decimalsCount,
+                $this->decimalPoint,
+                $this->thousandsSeparator
+            );
+
+            if ($this->unit !== '') {
+                $formatted .= ' ' . $this->unit;
+            }
+        }
+
+        return $formatted;
+    }
 }

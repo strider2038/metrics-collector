@@ -11,7 +11,12 @@
 {% block body %}
     <nav class="nav-extended">
         <div class="nav-wrapper container">
-            <a href="#" class="brand-logo">Logo</a>
+            <a href="#" class="brand-logo">{{ appTitle }}</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="/statistics">Statistics</a></li>
+{#                <li><a href="/{{ path('logs') }}">Logs</a></li>#}
+                <li><a href="#">About</a></li>
+            </ul>
         </div>
         <div class="nav-content container">
             <ul class="tabs tabs-transparent">
@@ -29,6 +34,7 @@
     <div class="container">
         {% if currentSection is defined %}
             <h1>{{ currentSection.title }}</h1>
+            {% set pageTitle = currentSection.title %}
         {% endif %}
         {% block content %}{% endblock %}
     </div>

@@ -1,16 +1,16 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-    {% if statistics.headers|length == 0 %}
+    <h3>Average values per days</h3>
+    {% if statistics.metrics|length == 0 %}
         <p>Section has no metrics</p>
     {% else %}
-        <p>Average values per days</p>
         <table class="highlight">
             <thead>
             <tr>
                 <th>Date</th>
-                {% for header in statistics.headers %}
-                    <th>{{ header }}</th>
+                {% for metric in statistics.metrics %}
+                    <th>{{ metric.title }}</th>
                 {% endfor %}
             </tr>
             </thead>

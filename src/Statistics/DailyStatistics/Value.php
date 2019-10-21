@@ -15,8 +15,8 @@ namespace App\Statistics\DailyStatistics;
  */
 class Value
 {
-    /** @var float|null */
-    public $averageValue;
+    /** @var string */
+    public $averageValue = '';
 
     public function toPlainValues(): array
     {

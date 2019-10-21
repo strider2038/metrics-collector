@@ -1,0 +1,4 @@
+App\Entity\Format:
+
+  percents:
+    unit: '%'

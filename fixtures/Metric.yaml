@@ -4,6 +4,7 @@ App\Entity\Metric:
     section: '@mainSection'
     name: 'main_coverage'
     title: 'Coverage'
+    format: '@percents'
     orderIndex: 0
 
   qualityMetric:

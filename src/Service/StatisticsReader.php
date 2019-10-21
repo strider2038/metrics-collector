@@ -11,6 +11,7 @@
 namespace App\Service;
 
 use App\Entity\Metric;
+use App\Entity\MetricCollection;
 use App\Entity\Section;
 use App\Repository\MetricRepository;
 use App\Repository\ValueRepository;
@@ -78,8 +79,6 @@ class StatisticsReader
 
         /** @var Metric $metric */
         foreach ($metrics as $metric) {
-            $statistics->headers[] = $metric->getName();
-
             $averageValues = $this->valueRepository->getAverageValuesPerDayByMetric($metric);
 
             if (count($averageValues) > 0) {
@@ -102,26 +101,43 @@ class StatisticsReader
             $averageValuesPerMetric[$metric->getName()] = $averageValues;
         }
 
+        $statistics->metrics = $metrics;
+
         if ($minDate && $maxDate) {
-            $statistics->values = $this->generateStatisticValues($averageValuesPerMetric, $minDate, $maxDate);
+            $statistics->values = $this->generateStatisticValues($metrics, $averageValuesPerMetric, $minDate, $maxDate);
         }
 
         return $statistics;
     }
 
-    private function generateStatisticValues(array $averageValuesPerMetric, \DateTimeImmutable $minDate, \DateTimeImmutable $maxDate): ValuePerMetricPerDay
-    {
+    private function generateStatisticValues(
+        MetricCollection $metrics,
+        array $averageValuesPerMetric,
+        \DateTimeImmutable $minDate,
+        \DateTimeImmutable $maxDate
+    ): ValuePerMetricPerDay {
         $days = $this->getDaysBetween($minDate, $maxDate);
 
         $valuePerMetricPerDay = new ValuePerMetricPerDay();
         $metricNames = array_keys($averageValuesPerMetric);
+
+        /** @var Metric[] $metricsByName */
+        $metricsByName = [];
+
+        /** @var Metric $metric */
+        foreach ($metrics as $metric) {
+            $metricsByName[$metric->getName()] = $metric;
+        }
 
         foreach ($days as $day) {
             $valuePerMetric = new ValuePerMetric();
 
             foreach ($metricNames as $metricName) {
                 $value = new Value();
-                $value->averageValue = $averageValuesPerMetric[$metricName][$day] ?? null;
+                $averageValue = $averageValuesPerMetric[$metricName][$day] ?? null;
+
+                $format = $metricsByName[$metricName]->getFormat();
+                $value->averageValue = $format->formatValue($averageValue);
 
                 $valuePerMetric->put($metricName, $value);
             }

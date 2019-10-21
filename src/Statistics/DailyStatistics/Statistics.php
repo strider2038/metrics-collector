@@ -10,6 +10,7 @@
 
 namespace App\Statistics\DailyStatistics;
 
+use App\Entity\MetricCollection;
 use App\Statistics\DailyStatistics\ValuePerMetricPerDay;
 
 /**
@@ -17,14 +18,15 @@ use App\Statistics\DailyStatistics\ValuePerMetricPerDay;
  */
 class Statistics
 {
-    /** @var string[] */
-    public $headers = [];
+    /** @var MetricCollection */
+    public $metrics;
 
     /** @var ValuePerMetricPerDay */
     public $values;
 
     public function __construct()
     {
+        $this->metrics = new MetricCollection();
         $this->values = new ValuePerMetricPerDay();
     }
 }

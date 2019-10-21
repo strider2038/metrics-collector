@@ -37,7 +37,7 @@ class StatisticsReaderTest extends TestCase
     }
 
     /** @test */
-    public function getDailySectionStatistics_given_expected(): void
+    public function getDailySectionStatistics_metricsWithValues_formattedStatistics(): void
     {
         $section = new Section();
         $reader = new StatisticsReader($this->metricRepository, $this->valueRepository);
@@ -45,16 +45,16 @@ class StatisticsReaderTest extends TestCase
         $metric1->setName('metricName1');
         $metric2 = new Metric();
         $metric2->setName('metricName2');
-        $this->givenMetricRepository_findBySectionOrderedByIndex_returnsMetrics($metric1, $metric2);
+        $metrics = $this->givenMetricRepository_findBySectionOrderedByIndex_returnsMetrics($metric1, $metric2);
         $this->givenValueRepository_getAverageValuesPerDayByMetric_returnsValues($metric1, [
-            '2019-08-06' => 47,
-            '2019-08-05' => 37,
-            '2019-08-02' => 41,
+            '2019-08-06' => 47.997,
+            '2019-08-05' => 37.123,
+            '2019-08-02' => 41.457,
         ]);
         $this->givenValueRepository_getAverageValuesPerDayByMetric_returnsValues($metric2, [
-            '2019-08-07' => 53,
-            '2019-08-06' => 42,
-            '2019-08-01' => 33,
+            '2019-08-07' => 53.4123,
+            '2019-08-06' => 42.1,
+            '2019-08-01' => 33.3123,
         ]);
 
         $statistics = $reader->getDailySectionStatistics($section);
@@ -62,63 +62,63 @@ class StatisticsReaderTest extends TestCase
         $this->assertMetricRepository_findBySectionOrderedByIndex_wasCalledOnceWithSection($section);
         $this->assertValueRepository_getAverageValuesPerDayByMetric_wasCalledOnceWithMetric($metric1);
         $this->assertValueRepository_getAverageValuesPerDayByMetric_wasCalledOnceWithMetric($metric2);
-        $this->assertSame(['metricName1', 'metricName2'], $statistics->headers);
+        $this->assertSame($metrics, $statistics->metrics);
         $this->assertSame(
             [
                 '2019-08-07' => [
                     'metricName1' => [
-                        'averageValue' => null,
+                        'averageValue' => '',
                     ],
                     'metricName2' => [
-                        'averageValue' => 53,
+                        'averageValue' => '53.41',
                     ],
                 ],
                 '2019-08-06' => [
                     'metricName1' => [
-                        'averageValue' => 47,
+                        'averageValue' => '48.00',
                     ],
                     'metricName2' => [
-                        'averageValue' => 42,
+                        'averageValue' => '42.10',
                     ],
                 ],
                 '2019-08-05' => [
                     'metricName1' => [
-                        'averageValue' => 37,
+                        'averageValue' => '37.12',
                     ],
                     'metricName2' => [
-                        'averageValue' => null,
+                        'averageValue' => '',
                     ],
                 ],
                 '2019-08-04' => [
                     'metricName1' => [
-                        'averageValue' => null,
+                        'averageValue' => '',
                     ],
                     'metricName2' => [
-                        'averageValue' => null,
+                        'averageValue' => '',
                     ],
                 ],
                 '2019-08-03' => [
                     'metricName1' => [
-                        'averageValue' => null,
+                        'averageValue' => '',
                     ],
                     'metricName2' => [
-                        'averageValue' => null,
+                        'averageValue' => '',
                     ],
                 ],
                 '2019-08-02' => [
                     'metricName1' => [
-                        'averageValue' => 41,
+                        'averageValue' => '41.46',
                     ],
                     'metricName2' => [
-                        'averageValue' => null,
+                        'averageValue' => '',
                     ],
                 ],
                 '2019-08-01' => [
                     'metricName1' => [
-                        'averageValue' => null,
+                        'averageValue' => '',
                     ],
                     'metricName2' => [
-                        'averageValue' => 33,
+                        'averageValue' => '33.31',
                     ],
                 ],
             ],
@@ -145,10 +145,14 @@ class StatisticsReaderTest extends TestCase
             ->getAverageValuesPerDayByMetric($metric);
     }
 
-    private function givenMetricRepository_findBySectionOrderedByIndex_returnsMetrics(Metric ...$metrics): void
+    private function givenMetricRepository_findBySectionOrderedByIndex_returnsMetrics(Metric ...$metrics): MetricCollection
     {
+        $metrics = new MetricCollection($metrics);
+
         \Phake::when($this->metricRepository)
             ->findBySectionOrderedByIndex(\Phake::anyParameters())
-            ->thenReturn(new MetricCollection($metrics));
+            ->thenReturn($metrics);
+
+        return $metrics;
     }
 }
