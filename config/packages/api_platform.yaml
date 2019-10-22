@@ -1,11 +1,25 @@
 api_platform:
   title: '%app_title%'
   version: '0.1'
+  path_segment_name_generator: api_platform.path_segment_name_generator.dash
   mapping:
-    paths: ['%kernel.project_dir%/src/Entity']
+    paths:
+      - '%kernel.project_dir%/src/Entity'
+      - '%kernel.project_dir%/config/api_platform'
 
   swagger:
+    versions: [3]
     api_keys:
       apiKey:
         name: Authorization
         type: header
+
+  formats:
+    jsonld:
+      mime_types: ['application/ld+json']
+    html:
+      mime_types: ['text/html']
+
+  error_formats:
+    jsonld:
+      mime_types: ['application/ld+json']

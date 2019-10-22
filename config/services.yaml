@@ -9,7 +9,7 @@ services:
 
   App\:
     resource: '../src/*'
-    exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+    exclude: '../src/{DependencyInjection,Entity,Migrations,Serializer,Kernel.php}'
 
   App\Controller\:
     resource: '../src/Controller'
@@ -18,3 +18,7 @@ services:
   App\Security\TokenAuthenticator:
     arguments:
       - '%access_token%'
+
+  App\Serialization\:
+    resource: '../src/Serialization/*'
+    tags: [{ name: serializer.normalizer }]

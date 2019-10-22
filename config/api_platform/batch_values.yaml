@@ -1,0 +1,36 @@
+resources:
+
+  App\Entity\ValueCollection:
+    itemOperations: []
+    collectionOperations:
+      post:
+        method: 'POST'
+        path: '/batch-values'
+        controller: App\Controller\PostBatchValuesAction
+        read: false
+        openapi_context:
+          summary: 'Create batch of values'
+          tags: ['Value']
+          requestBody:
+            required: true
+            content:
+              application/ld+json:
+                schema:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - metric
+                      - createdAt
+                      - value
+                      - tag
+                    properties:
+                      metric:
+                        type: string
+                      createdAt:
+                        type: string
+                        format: datetime
+                      value:
+                        type: number
+                      tag:
+                        type: string

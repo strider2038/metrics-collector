@@ -21,3 +21,19 @@ Content-Type: application/ld+json
 
 ###
 
+
+POST http://localhost:8080/api/batch-values
+Authorization: Bearer !ChangeMe!
+Accept: application/ld+json
+Content-Type: application/ld+json
+
+[
+  {
+    "metric": "/api/metrics/main_coverage",
+    "createdAt": "2019-10-22T17:41:31.059Z",
+    "value": 110.123,
+    "tag": "master"
+  }
+]
+
+###
