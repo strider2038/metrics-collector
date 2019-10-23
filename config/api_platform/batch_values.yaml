@@ -18,19 +18,15 @@ resources:
                 schema:
                   type: array
                   items:
-                    type: object
-                    required:
-                      - metric
-                      - createdAt
-                      - value
-                      - tag
-                    properties:
-                      metric:
-                        type: string
-                      createdAt:
-                        type: string
-                        format: datetime
-                      value:
-                        type: number
-                      tag:
-                        type: string
+                    $ref: '#/components/schemas/Value:jsonld-valueWrite'
+          responses:
+            '201':
+              description: 'Batch of values created'
+              content:
+                application/ld+json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Value:jsonld-valueRead'
+            '400':
+              description: 'Invalid input'
