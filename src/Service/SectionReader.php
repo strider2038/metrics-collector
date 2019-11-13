@@ -11,6 +11,7 @@
 namespace App\Service;
 
 use App\Entity\Section;
+use App\Entity\SectionCollection;
 use App\Repository\SectionRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,7 +39,7 @@ class SectionReader
         return $this->sectionRepository->findOneBy(['name' => $name]);
     }
 
-    public function getAllSections(): Collection
+    public function getAllSections(): SectionCollection
     {
         return $this->sectionRepository->findAllOrderedByIndex();
     }

@@ -14,9 +14,29 @@ Accept: application/ld+json
 Content-Type: application/ld+json
 
 {
-  "name": "name",
-  "title": "Title",
-  "orderIndex": 0
+  "name": "test2",
+  "title": "second",
+  "orderIndex": 1
+}
+
+###
+
+PUT http://localhost:8080/api/metrics/main_coverage
+Authorization: Bearer !ChangeMe!
+Accept: application/ld+json
+Content-Type: application/ld+json
+
+{
+  "name": "main_coverage",
+  "section": "/api/sections/main",
+  "title": "Coverage",
+  "format": {
+    "decimalsCount": 2,
+    "decimalPoint": ".",
+    "thousandsSeparator": "",
+    "unit": "%"
+  },
+  "orderIndex": 5
 }
 
 ###

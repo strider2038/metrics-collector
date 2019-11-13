@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Section;
+use App\Entity\SectionCollection;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -32,15 +33,15 @@ class SectionRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Section[]|Collection
+     * @return SectionCollection
      */
-    public function findAllOrderedByIndex(): Collection
+    public function findAllOrderedByIndex(): SectionCollection
     {
         $queryBuilder = $this->createQueryBuilder('s');
         $queryBuilder->orderBy('s.orderIndex', 'ASC');
         $query = $queryBuilder->getQuery();
         $rows = $query->getResult();
 
-        return new ArrayCollection($rows);
+        return new SectionCollection($rows);
     }
 }

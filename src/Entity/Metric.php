@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use App\Contracts\IndexedEntityInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,9 +28,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\MetricRepository")
  * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity({"name"})
- * @UniqueEntity({"orderIndex"})
  */
-class Metric
+class Metric implements IndexedEntityInterface
 {
     /**
      * @ORM\Id()
